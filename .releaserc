@@ -1,10 +1,23 @@
 {
   "branches": ["main"],
   "plugins": [
-    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "chore", "release": "patch" }  // chore wird wie fix behandelt
+        ]
+      }
+    ],
     "@semantic-release/release-notes-generator",
-    ["@semantic-release/github", {
-      "draft": true
-    }]
+    [
+      "@semantic-release/github",
+      {
+        "draft": true
+      }
+    ]
   ]
 }
