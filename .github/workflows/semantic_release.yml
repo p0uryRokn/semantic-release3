@@ -26,10 +26,22 @@ jobs:
       - name: Create Pre-Release
         run: npx semantic-release --branches main
 
-      - name: Mark as Pre-Release
+      - name: Create Draft Release with Commits
         run: |
           TAG=$(git describe --tags --abbrev=0)
-          echo "Latest tag created by semantic-release: $TAG"
-          gh release edit "$TAG" --draft
+          echo "Latest tag: $TAG"
+      
+          # Letzten Release-Tag finden
+          LAST_TAG=$(git describe --tags --abbrev=0 "$TAG"^)
+          echo "Last release tag: $LAST_TAG"
+      
+          # Commits seit letztem Release sammeln
+          COMMITS=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%an)")
+          echo "Commits since last release:"
+          echo "$COMMITS"
+      
+          # Draft Release erstellen
+          gh release create "$TAG" --draft --title "Draft $TAG" --notes "$COMMITS"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
