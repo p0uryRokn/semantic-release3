@@ -1,0 +1,11 @@
+{
+  "name": "mein-projekt",
+  "version": "1.0.0",
+  "description": "Ein Beispielprojekt mit semantic-release",
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "semantic-release": "^23.0.0"
+  }
+}
