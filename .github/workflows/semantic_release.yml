@@ -30,6 +30,6 @@ jobs:
         run: |
           TAG=$(git describe --tags --abbrev=0)
           echo "Latest tag created by semantic-release: $TAG"
-          gh release edit "$TAG" --prerelease
+          gh release edit "$TAG" --draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
