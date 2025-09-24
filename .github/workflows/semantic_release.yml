@@ -33,7 +33,7 @@ jobs:
           echo "Current tag: $TAG"
       
           # Letzten veröffentlichten Release-Tag holen
-          LAST_RELEASE_TAG=$(gh release list --limit 1 --exclude-drafts --exclude-prereleases --json tagName -q '.[0].tagName')
+          LAST_RELEASE_TAG=$(gh release list --limit 1 --exclude-drafts --exclude-pre-releases --json tagName -q '.[0].tagName')
           echo "Last published release tag: $LAST_RELEASE_TAG"
       
           # Alle Commits seit letztem veröffentlichten Release sammeln
@@ -45,4 +45,3 @@ jobs:
           gh release create "$TAG" --draft --title "Draft $TAG" --notes "$COMMITS"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
