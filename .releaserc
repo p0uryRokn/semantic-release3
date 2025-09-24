@@ -8,7 +8,7 @@
         "releaseRules": [
           { "type": "feat", "release": "minor" },
           { "type": "fix", "release": "patch" },
-          { "type": "chore", "release": "patch" }  // chore wird wie fix behandelt
+          { "type": "chore", "release": "patch" }
         ]
       }
     ],
