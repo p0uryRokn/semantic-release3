@@ -1,14 +1,14 @@
-# .github/workflows/pre-release.yml
 name: Pre-Release
 
 on:
   push:
     branches:
-      - main
+      - main  # Workflow wird bei Push auf main ausgelöst
 
 jobs:
   pre-release:
     runs-on: ubuntu-latest
+    environment: dev   # <- Job ist jetzt der dev Environment zugeordnet
     permissions:
       contents: write
       issues: write
@@ -19,6 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Install Dependencies
         run: npm install
 
