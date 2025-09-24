@@ -26,10 +26,10 @@ jobs:
       - name: Create Pre-Release
         run: npx semantic-release --branches main
 
-      - name: Mark as Pre-Release
+      - name: Create Draft Release
         run: |
           TAG=$(git describe --tags --abbrev=0)
-          echo "Latest tag created by semantic-release: $TAG"
-          gh release edit "$TAG" --prerelease
+          echo "Creating Draft Release for $TAG"
+          gh release create "$TAG" --draft --title "Draft $TAG" --notes "Auto-generated draft release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
