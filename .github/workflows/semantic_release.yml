@@ -26,18 +26,19 @@ jobs:
       - name: Create Pre-Release
         run: npx semantic-release --branches main
 
-      - name: Create Draft Release with Commits
+      - name: Create Draft Release with commits since latest release
         run: |
+          # Aktuellen Tag ermitteln
           TAG=$(git describe --tags --abbrev=0)
-          echo "Latest tag: $TAG"
+          echo "Current tag: $TAG"
       
-          # Letzten Release-Tag finden
-          LAST_TAG=$(git describe --tags --abbrev=0 "$TAG"^)
-          echo "Last release tag: $LAST_TAG"
+          # Letzten veröffentlichten Release-Tag holen
+          LAST_RELEASE_TAG=$(gh release list --limit 1 --exclude-drafts --exclude-prereleases --json tagName -q '.[0].tagName')
+          echo "Last published release tag: $LAST_RELEASE_TAG"
       
-          # Commits seit letztem Release sammeln
-          COMMITS=$(git log $LAST_TAG..HEAD --pretty=format:"- %s (%an)")
-          echo "Commits since last release:"
+          # Alle Commits seit letztem veröffentlichten Release sammeln
+          COMMITS=$(git log $LAST_RELEASE_TAG..HEAD --pretty=format:"- %s (%an)" --no-merges)
+          echo "Commits since last published release:"
           echo "$COMMITS"
       
           # Draft Release erstellen
