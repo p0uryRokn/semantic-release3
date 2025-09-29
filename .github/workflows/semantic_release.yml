@@ -1,14 +1,11 @@
 name: Pre-Release
 
 on:
-  push:
-    branches:
-      - main  # Workflow wird bei Push auf main ausgelöst
+  workflow_dispatch:   # <-- Manueller Trigger über GitHub Actions UI
 
 jobs:
   pre-release:
     runs-on: ubuntu-latest
-    environment: dev   # <- Job ist jetzt der dev Environment zugeordnet
     permissions:
       contents: write
       issues: write
@@ -19,29 +16,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Install Dependencies
         run: npm install
 
       - name: Create Pre-Release
         run: npx semantic-release --branches main
 
-      - name: Create Draft Release with commits since latest release
+      - name: Mark as Pre-Release
         run: |
-          # Aktuellen Tag ermitteln
           TAG=$(git describe --tags --abbrev=0)
-          echo "Current tag: $TAG"
-      
-          # Letzten veröffentlichten Release-Tag holen
-          LAST_RELEASE_TAG=$(gh release list --limit 1 --exclude-drafts --exclude-pre-releases --json tagName -q '.[0].tagName')
-          echo "Last published release tag: $LAST_RELEASE_TAG"
-      
-          # Alle Commits seit letztem veröffentlichten Release sammeln
-          COMMITS=$(git log $LAST_RELEASE_TAG..HEAD --pretty=format:"- %s (%an)" --no-merges)
-          echo "Commits since last published release:"
-          echo "$COMMITS"
-      
-          # Draft Release erstellen
-          gh release create "$TAG" --draft --title "Draft $TAG" --notes "$COMMITS"
+          echo "Latest tag created by semantic-release: $TAG"
+          gh release edit "$TAG" --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
