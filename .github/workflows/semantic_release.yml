@@ -1,7 +1,7 @@
 name: Pre-Release
 
 on:
-  workflow_dispatch:   # <-- Manueller Trigger über GitHub Actions UI
+  workflow_dispatch:
 
 jobs:
   pre-release:
